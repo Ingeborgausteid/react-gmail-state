@@ -67,11 +67,11 @@
   z-index: 1;
 }
 
-.email.read {
+.email .read {
   background-color: rgb(240, 240, 240);
 }
 
-.email.unread {
+.email .unread {
   font-weight: 600;
 }
 

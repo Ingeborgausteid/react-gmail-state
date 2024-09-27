@@ -4,27 +4,27 @@ import { useState } from "react";
 
 import "./styles/App.css";
 
-function RenderEmails({ emails }) {
-  return emails.map((email) => {
-    return (
-      <li className="email" key={email.id}>
-        <div className="select">
-          <input className="select-checkbox" type="checkbox" />
-        </div>
-        <div className="star">
-          <input className="star-checkbox" type="checkbox" />
-        </div>
-        <div className="sender">{email.sender}</div>
-        <div className="title">{email.title}</div>
-      </li>
-    );
-  });
-}
-
 function App() {
-  // Use initialEmails for state
-  console.log(initialEmails);
   const [emails, setEmails] = useState(initialEmails);
+
+  const toggleRead = (id) => {
+    const newEmails = emails.map((email) => {
+      if (email.id === id) {
+        return { ...email, read: !email.read };
+      }
+      return email;
+    });
+    setEmails(newEmails);
+    console.log(newEmails);
+  };
+
+  const toggleStarred = (id) => {
+    const newEmails = emails.map((email) => {
+      return email.id === id ? { ...email, starred: !email.starred } : email;
+    });
+    setEmails(newEmails);
+    console.log(newEmails);
+  };
 
   return (
     <div className="app">
@@ -33,17 +33,17 @@ function App() {
         <ul className="inbox-list">
           <li
             className="item active"
-            // onClick={() => {}}
+            
           >
             <span className="label">Inbox</span>
             <span className="count">{initialEmails.length}</span>
           </li>
           <li
             className="item"
-            // onClick={() => {}}
+            
           >
             <span className="label">Starred</span>
-            <span className="count">?</span>
+            <span className="count"></span>
           </li>
 
           <li className="item toggle">
@@ -51,15 +51,37 @@ function App() {
             <input
               id="hide-read"
               type="checkbox"
-              checked={false}
-              // onChange={() => {}}
             />
           </li>
         </ul>
       </nav>
       <main className="emails">
         <ul>
-          <RenderEmails emails={emails}/>
+          {emails.map((email) => (
+            <li
+              className={`email ${email.read ? 'read' : 'unread'}`}
+              key={email.id}
+            >
+              <div className="select">
+                <input
+                  className="select-checkbox "
+                  type="checkbox"
+                  checked={email.read}
+                  onChange={() => toggleRead(email.id)}
+                />
+              </div>
+              <div className="star">
+                <input
+                  className="star-checkbox"
+                  type="checkbox"
+                  checked={email.starred}
+                  onChange={() => toggleStarred(email.id)}
+                />
+              </div>
+              <div className="sender">{email.sender}</div>
+              <div className="title">{email.title}</div>
+            </li>
+          ))}
         </ul>
       </main>
     </div>
